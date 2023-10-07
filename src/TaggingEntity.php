@@ -10,6 +10,9 @@ use tthe\TagScheme\Contracts\TagInterface;
 use tthe\TagScheme\Exceptions\TagSchemeException;
 use tthe\TagScheme\Util\DateUtil;
 
+/**
+ * A Tagging Entity is an object capable of minting Tag URIs.
+ */
 class TaggingEntity implements TaggingEntityInterface
 {
     private Authority $authority;
@@ -17,6 +20,12 @@ class TaggingEntity implements TaggingEntityInterface
     private Date $date;
 
     /**
+     * Create a Tagging Entity using either a domain name or an email address as the authority.
+     * (Note: You must be in control of the authority on the given date.)
+     *
+     * The date defaults to today. DateUtil enums can be used for some easy presets,
+     * or DateUtil::date can be used to create properly setup DateTimeImmutable objects.
+     *
      * @param Authority|string $authority
      * @param DateUtil|\DateTimeImmutable $date
      * @throws TagSchemeException
@@ -36,7 +45,6 @@ class TaggingEntity implements TaggingEntityInterface
         $this->authority = $authority;
         $this->date = new Date($date);
     }
-
 
     public function mint(string $resource): TagInterface
     {

@@ -15,6 +15,9 @@ readonly class Date implements UriPart
         if ($datetime->getOffset() !== 0) {
             throw new TagSchemeException('Date must be provided in UTC.');
         }
+        if ($datetime->format('H:i:s') !== '00:00:00') {
+            throw new TagSchemeException('Time must be set to midnight.');
+        }
 
         $this->datetime = $datetime;
     }

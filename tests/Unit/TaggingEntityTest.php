@@ -83,7 +83,7 @@ describe('TaggingEntity - Date', function () {
     });
 
     test('should accept datetime', function () {
-        $today = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+        $today = new DateTimeImmutable('midnight', new DateTimeZone('UTC'));
         $m = new TaggingEntity('example.org', $today);
 
         expect($m->getDate()->value())->toBe($today);

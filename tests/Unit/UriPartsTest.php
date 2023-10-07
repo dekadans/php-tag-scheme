@@ -8,7 +8,7 @@ use tthe\TagScheme\Exceptions\TagSchemeException;
 
 describe('Date', function() {
     test('value returns original object', function() {
-        $dt = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+        $dt = new DateTimeImmutable('midnight', new DateTimeZone('UTC'));
         $date = new Date($dt);
 
         expect($date->value())->toBe($dt);
@@ -36,7 +36,12 @@ describe('Date', function() {
     });
 
     test('exception for non-UTC datetimes', function() {
-        $dt = new DateTimeImmutable('now', new DateTimeZone('CET'));
+        $dt = new DateTimeImmutable('midnight', new DateTimeZone('CET'));
+        $date = new Date($dt);
+    })->throws(TagSchemeException::class);
+
+    test('exception for non-midnight datetimes', function() {
+        $dt = new DateTimeImmutable('12:23:45', new DateTimeZone('UTC'));
         $date = new Date($dt);
     })->throws(TagSchemeException::class);
 });

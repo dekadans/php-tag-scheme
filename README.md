@@ -29,7 +29,7 @@ echo $te->mint('some-resource');
 // (date is whatever today's date is)
 ```
 
-It's also possible to set the date to the beginning of the current year:
+There's a couple of date presets available as `DateUtil::FIRST_OF_YEAR` and `DateUtil::FIRST_OF_MONTH`...
 
 ```php
 use tthe\TagScheme\TaggingEntity;
@@ -39,6 +39,18 @@ $te = new TaggingEntity('example.org', DateUtil::FIRST_OF_YEAR);
 echo $te->mint('some-resource');
 
 // tag:example.org,2023:some-resource
+```
+
+...or more explicitly through `DateUtil::date`
+
+```php
+use tthe\TagScheme\TaggingEntity;
+use tthe\TagScheme\Util\DateUtil;
+
+$te = new TaggingEntity('demo@example.org', DateUtil::date('2020-04-17'));
+echo $te->mint('some-resource');
+
+// tag:demo@example.org,2020-04-17:some-resource
 ```
 
 The minted tag URI is actually a `Tag` object that implements `Stringable` and `JsonSerializable`.

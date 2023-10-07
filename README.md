@@ -5,7 +5,7 @@ A PHP implementation of RFC 4151: The 'tag' URI Scheme.
 A Tag URI is an identifier for a specific resource tied to a domain name or e-mail address at a given point in time.
 It can look something like `tag:example.org,2023:some-resource`.
 
-It can be used when something should be identified using a URI, human-readability is a priority and 
+It can be used when something should be identified using a human-readable URI, instead of non-resolvable HTTP URIs.
 
 More information at [taguri.org](https://www.taguri.org/) and [the RFC](https://www.rfc-editor.org/rfc/rfc4151).
 
@@ -32,8 +32,8 @@ echo $te->mint('some-resource');
 It's also possible to set the date to the beginning of the current year:
 
 ```php
-use tthe\TagScheme\TaggingEntity
-use tthe\TagScheme\Util\DateUtil
+use tthe\TagScheme\TaggingEntity;
+use tthe\TagScheme\Util\DateUtil;
 
 $te = new TaggingEntity('example.org', DateUtil::FIRST_OF_YEAR);
 echo $te->mint('some-resource');

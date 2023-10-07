@@ -1,0 +1,30 @@
+{
+  "name": "tthe/php-tag-scheme",
+  "description": "PHP implementation of RFC 4151: The 'tag' URI Scheme",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "tthe\\TagScheme\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Tomas Thelander",
+      "email": "tomas@tthe.se",
+      "homepage": "https://tthe.se",
+      "role": "Developer"
+    }
+  ],
+  "require-dev": {
+    "pestphp/pest": "^2.19"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}

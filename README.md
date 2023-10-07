@@ -62,8 +62,8 @@ Tags, like all URIs, support query and fragment components.
 However, preserving human readability should always be prioritized.
 
 ```php
-use tthe\TagScheme\TaggingEntity
-use tthe\TagScheme\Util\DateUtil
+use tthe\TagScheme\TaggingEntity;
+use tthe\TagScheme\Util\DateUtil;
 
 $te = new TaggingEntity('example.org', DateUtil::FIRST_OF_YEAR);
 echo $te->mint('some-resource')

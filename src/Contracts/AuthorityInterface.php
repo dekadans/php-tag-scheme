@@ -4,9 +4,8 @@ namespace tthe\TagScheme\Contracts;
 
 use tthe\TagScheme\Components\AuthorityType;
 
-interface AuthorityInterface
+/** @extends UriPart<string> */
+interface AuthorityInterface extends UriPart
 {
     public function type(): AuthorityType;
-
-    public function value(): string;
 }

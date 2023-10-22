@@ -15,9 +15,8 @@ interface UriPart
     /**
      * Returns the raw representation. The type will depend on the component:
      * date = instance of DateTimeImmutable
-     * resource = string, non-encoded
      * query = associative array
-     * fragment = string, non-encoded
+     * authority, resource and fragment = string, non-encoded
      *
      * @return T
      */

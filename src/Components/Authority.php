@@ -31,6 +31,11 @@ readonly class Authority implements AuthorityInterface {
         return $this->value;
     }
 
+    public function encoded(): string
+    {
+        return $this->value;
+    }
+
     /** @throws TagSchemeException */
     public static function from(string $authority): static
     {

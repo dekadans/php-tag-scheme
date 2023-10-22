@@ -3,7 +3,7 @@
 A PHP implementation of RFC 4151: The 'tag' URI Scheme.
 
 A Tag URI is an identifier for a specific resource tied to a domain name or e-mail address at a given point in time.
-It can look something like `tag:example.org,2023:some-resource`.
+It can look something like `tag:example.org,2023:resource`.
 
 It can be used when something should be identified using a human-readable URI, instead of non-resolvable HTTP URIs.
 
@@ -19,35 +19,64 @@ composer require tthe/php-tag-scheme
 
 ## Basic Usage
 
-Tag URIs are created through a `TaggingEntity` object based on a domain name or an e-mail address and a date (defaults to today).
-
 ```php
-$te = new \tthe\TagScheme\TaggingEntity('example.org');
-echo $te->mint('some-resource');
+use tthe\TagScheme\TaggingEntity;
+use tthe\TagScheme\Util\DateUtil;
 
-// tag:example.org,2023-10-07:some-resource
-// (date is whatever today's date is)
+$te = new TaggingEntity('example.org');
+$tag = $te->mint('something');
+
+echo $tag; // Prints "tag:example.org,2023-10-22:something"
 ```
 
-There's a couple of date presets available as `DateUtil::FIRST_OF_YEAR` and `DateUtil::FIRST_OF_MONTH`...
+## Tagging Entity
+
+Tag URIs are created through a `TaggingEntity` object based on a domain name or an e-mail address and a date.
+The date defaults to today but can be set in various ways using `DateUtil`.
 
 ```php
 use tthe\TagScheme\TaggingEntity;
 use tthe\TagScheme\Util\DateUtil;
 
-$te = new TaggingEntity('example.org', DateUtil::FIRST_OF_YEAR);
+// The tagging authority can be either domain name or an e-mail address.
+$authority = 'example.org';
+
+// If no date is provided it will default to today.
+$te1 = new TaggingEntity($authority);
+
+// We can also set it to January 1 of the current year...
+$te2 = new TaggingEntity($authority, DateUtil::FIRST_OF_YEAR);
+
+// ...or the first day of the current month...
+$te3 = new TaggingEntity($authority, DateUtil::FIRST_OF_MONTH);
+
+// ...or an explicit date.
+$te4 = new TaggingEntity($authority, DateUtil::date('2020-04-17'));
 ```
 
-...or more explicitly through `DateUtil::date`
+## Tag Objects
+
+Minted tag URIs are objects implementing `TagInterface`, and extends `Stringable` and `JsonSerializable`.
 
 ```php
 use tthe\TagScheme\TaggingEntity;
 use tthe\TagScheme\Util\DateUtil;
 
-$te = new TaggingEntity('example.org', DateUtil::date('2020-04-17'));
-```
+$te = new TaggingEntity('demo@example.org', DateUtil::FIRST_OF_YEAR);
+$tag = $te->mint('something');
 
-The minted tag URI is actually a `Tag` object that implements `Stringable` and `JsonSerializable`.
+echo $tag->toString();
+// tag:demo@example.org,2023:something
+
+echo $tag->getAuthority()->value();
+// demo@example.org
+
+echo $tag->getDate()->value()->format('Y-m-d');
+// 2023-01-01
+
+echo $tag->getResource()->value();
+// something
+```
 
 ## Parsing Strings
 
@@ -56,9 +85,6 @@ It's also possible to do it the other way around:
 ```php
 $s = 'tag:example.org,2023:some-resource';
 $tag = \tthe\TagScheme\Tag::fromString($s);
-
-echo $tag->getAuthority()->value();
-// example.org
 
 echo $tag->getResource()->value();
 // some-resource
@@ -74,11 +100,11 @@ use tthe\TagScheme\TaggingEntity;
 use tthe\TagScheme\Util\DateUtil;
 
 $te = new TaggingEntity('demo@example.org', DateUtil::FIRST_OF_YEAR);
-echo $te->mint('some-resource')
+echo $te->mint('something')
     ->withQuery(['param' => 'value'])
     ->withFragment('subresource');
 
-// tag:demo@example.org,2023:some-resource?param=value#subresource
+// tag:demo@example.org,2023:something?param=value#subresource
 ```
 
 ## PSR-7
@@ -87,7 +113,7 @@ For convenience, and despite the fact that tag URIs are not resolvable,
 a conversion method to the PSR-7 UriInterface is provided.
 
 ```php
-$s = 'tag:example.org,2023:some-resource';
+$s = 'tag:example.org,2023:something';
 $tag = \tthe\TagScheme\Tag::fromString($s);
 
 $psrImpl = $tag->toPsr7();

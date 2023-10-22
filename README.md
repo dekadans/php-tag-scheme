@@ -20,10 +20,7 @@ composer require tthe/php-tag-scheme
 ## Basic Usage
 
 ```php
-use tthe\TagScheme\TaggingEntity;
-use tthe\TagScheme\Util\DateUtil;
-
-$te = new TaggingEntity('example.org');
+$te = new \tthe\TagScheme\TaggingEntity('example.org');
 $tag = $te->mint('something');
 
 echo $tag; // Prints "tag:example.org,2023-10-22:something"
@@ -83,11 +80,11 @@ echo $tag->getResource()->value();
 It's also possible to do it the other way around:
 
 ```php
-$s = 'tag:example.org,2023:some-resource';
+$s = 'tag:example.org,2023:something';
 $tag = \tthe\TagScheme\Tag::fromString($s);
 
 echo $tag->getResource()->value();
-// some-resource
+// something
 ```
 
 ## Query Parameters and Fragments

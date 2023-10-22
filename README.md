@@ -36,9 +36,6 @@ use tthe\TagScheme\TaggingEntity;
 use tthe\TagScheme\Util\DateUtil;
 
 $te = new TaggingEntity('example.org', DateUtil::FIRST_OF_YEAR);
-echo $te->mint('some-resource');
-
-// tag:example.org,2023:some-resource
 ```
 
 ...or more explicitly through `DateUtil::date`
@@ -47,10 +44,7 @@ echo $te->mint('some-resource');
 use tthe\TagScheme\TaggingEntity;
 use tthe\TagScheme\Util\DateUtil;
 
-$te = new TaggingEntity('demo@example.org', DateUtil::date('2020-04-17'));
-echo $te->mint('some-resource');
-
-// tag:demo@example.org,2020-04-17:some-resource
+$te = new TaggingEntity('example.org', DateUtil::date('2020-04-17'));
 ```
 
 The minted tag URI is actually a `Tag` object that implements `Stringable` and `JsonSerializable`.
@@ -63,8 +57,10 @@ It's also possible to do it the other way around:
 $s = 'tag:example.org,2023:some-resource';
 $tag = \tthe\TagScheme\Tag::fromString($s);
 
-echo $tag->getResource()->value();
+echo $tag->getAuthority()->value();
+// example.org
 
+echo $tag->getResource()->value();
 // some-resource
 ```
 
@@ -77,12 +73,24 @@ However, preserving human readability should always be prioritized.
 use tthe\TagScheme\TaggingEntity;
 use tthe\TagScheme\Util\DateUtil;
 
-$te = new TaggingEntity('example.org', DateUtil::FIRST_OF_YEAR);
+$te = new TaggingEntity('demo@example.org', DateUtil::FIRST_OF_YEAR);
 echo $te->mint('some-resource')
     ->withQuery(['param' => 'value'])
     ->withFragment('subresource');
 
-// tag:example.org,2023:some-resource?param=value#subresource
+// tag:demo@example.org,2023:some-resource?param=value#subresource
+```
+
+## PSR-7
+
+For convenience, and despite the fact that tag URIs are not resolvable,
+a conversion method to the PSR-7 UriInterface is provided.
+
+```php
+$s = 'tag:example.org,2023:some-resource';
+$tag = \tthe\TagScheme\Tag::fromString($s);
+
+$psrImpl = $tag->toPsr7();
 ```
 
 ## Classes and Interfaces
@@ -91,5 +99,5 @@ echo $te->mint('some-resource')
 
 `\tthe\TagScheme\Tag` implements `\tthe\TagScheme\Contracts\TagInterface`
 
-A possible pattern is for example to initiate a TaggingEntity object centrally in your project and map it to
+A possible pattern can be to initiate a TaggingEntity object centrally in your project and map it to
 TaggingEntityInterface in your dependency injection container.

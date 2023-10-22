@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use tthe\TagScheme\Components\Date;
 use tthe\TagScheme\Components\Fragment;

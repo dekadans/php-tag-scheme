@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use tthe\TagScheme\Exceptions\TagSchemeException;
 use tthe\TagScheme\Util\DateUtil;

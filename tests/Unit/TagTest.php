@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 use tthe\TagScheme\TaggingEntity;
 use tthe\TagScheme\Util\DateUtil;
 
 describe('Tag', function() {
-    $m = new TaggingEntity('example.org', DateUtil::FIRST_OF_YEAR);
+    $m = new TaggingEntity('example.org', DateUtil::date('2023-01-01'));
 
     test('toString', function () use ($m) {
         $t = $m->mint('test')->toString();
@@ -19,6 +20,24 @@ describe('Tag', function() {
     test('json_encode', function () use ($m) {
         $t = json_encode($m->mint('test'));
         expect($t)->toBe('"tag:example.org,2023:test"');
+    });
+
+    test('psr7', function () use ($m) {
+        $t = $m->mint('test')
+            ->withQuery(['key' => 'value'])
+            ->withFragment('frag');
+
+        $psr = $t->toPsr7();
+        expect($psr)->toBeInstanceOf(\Psr\Http\Message\UriInterface::class);
+        expect($psr->getScheme())->toBe('tag');
+        expect($psr->getPath())->toBe('example.org,2023:test');
+        expect($psr->getAuthority())->toBe('');
+        expect($psr->getHost())->toBe('');
+        expect($psr->getUserInfo())->toBe('');
+        expect($psr->getPort())->toBeNull();
+        expect($psr->getQuery())->toBe('key=value');
+        expect($psr->getFragment())->toBe('frag');
+        expect((string) $psr)->toBe((string) $t);
     });
 
     test('empty resource', function () use ($m) {

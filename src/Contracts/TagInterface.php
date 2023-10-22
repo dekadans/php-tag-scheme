@@ -2,12 +2,15 @@
 
 namespace tthe\TagScheme\Contracts;
 
+use Psr\Http\Message\UriInterface;
+
 /**
- * An URI with the "tag" scheme, as defined in RFC 4151.
+ * A URI with the "tag" scheme, as defined in RFC 4151.
  */
 interface TagInterface extends \Stringable, \JsonSerializable
 {
     public function toString(): string;
+    public function toPsr7(): UriInterface;
 
     public function withQuery(array $parameters): TagInterface;
     public function withFragment(string $fragment): TagInterface;

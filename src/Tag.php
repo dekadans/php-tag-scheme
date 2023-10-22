@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace tthe\TagScheme;
 
+use Nyholm\Psr7\Uri;
+use Psr\Http\Message\UriInterface;
 use tthe\TagScheme\Components\Authority;
 use tthe\TagScheme\Components\Date;
 use tthe\TagScheme\Components\Fragment;
@@ -28,7 +30,6 @@ class Tag implements TagInterface
         $this->authority = $authority;
         $this->date = $date;
         $this->resource = $resource;
-
     }
 
     /** @throws TagSchemeException */
@@ -54,6 +55,11 @@ class Tag implements TagInterface
     public function toString(): string
     {
         return (string) StringTag::build($this);
+    }
+
+    public function toPsr7(): UriInterface
+    {
+        return new Uri($this->toString());
     }
 
     public function getAuthority(): Authority
